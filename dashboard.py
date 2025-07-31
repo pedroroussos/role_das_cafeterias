@@ -36,6 +36,7 @@ with col1:
     edited_df["long"] = df['long']
     edited_df["size"] = 1
     edited_df["id"] = edited_df["id"].apply(str)
+    edited_df["visitado"] = edited_df["visitado"].apply(lambda x: "Visitado" if x else "Não Visitado")
 
     fig = px.scatter_map(
         edited_df,
@@ -51,8 +52,8 @@ with col1:
         height=700,
         opacity = .85,
         color_discrete_map={
-        True: HIGHLIGHT,
-        False: TERTIARY
+        'Visitado': PRIMARY,
+        'Não Visitado': TERTIARY
         },
     )
 
@@ -60,10 +61,10 @@ with col1:
         map_style="carto-positron",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
         dragmode="zoom",
-        showlegend=False,
+        showlegend=True,
         font=dict(
-            size=10,
-            color=PRIMARY,
+            size=12,
+            color='white',
             family="Segoe UI"
         ),
     )
@@ -91,6 +92,23 @@ with col1:
                 }
             ]
         }
+    )
+
+
+    fig.update_layout(
+        legend_title_text='',
+        legend=dict(
+            x=0.98,
+            y=0.97,
+            xanchor='right',
+            yanchor='top',
+            bgcolor='rgba(255,255,255,0.7)',  # optional background box
+            borderwidth=1,
+            font=dict(
+                size=12,
+                color=PRIMARY
+            )
+        )
     )
 
 
