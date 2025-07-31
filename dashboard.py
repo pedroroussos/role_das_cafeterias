@@ -7,7 +7,6 @@ SECONDARY = '#DDD1C0'
 TERTIARY = '#C5A481'
 HIGHLIGHT = "#9E692F"
 
-
 st.set_page_config(layout="wide")
 
 
@@ -48,17 +47,17 @@ with col1:
         size='size',
         text = 'id',
         size_max = 14,
-        center={"lat": df["lat"].mean()-.03, "lon": df["long"].mean()},
+        center={"lat": df["lat"].min()+(df["lat"].max()-df["lat"].min())/2, "lon": df["long"].min()+(df["long"].max()-df["long"].min())/2},
         height=700,
         opacity = .85,
         color_discrete_map={
         True: HIGHLIGHT,
-        False: SECONDARY
+        False: TERTIARY
         },
     )
 
     fig.update_layout(
-        mapbox_style="white-bg",
+        map_style="carto-positron",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
         dragmode="zoom",
         showlegend=False,
@@ -68,5 +67,32 @@ with col1:
             family="Segoe UI"
         ),
     )
+
+    fig.update_layout(
+        map={
+            "layers": [
+                {
+                    "sourcetype": "geojson",
+                    "source": {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[
+                                [-90, -90],
+                                [-90,   0],
+                                [  0,   0],
+                                [  0, -90],
+                                [-90, -90]
+                            ]]
+                        }
+                    },
+                    "type": "fill",
+                    "color": "rgba(221, 209, 192, 0.3)",
+                    "below": "traces"
+                }
+            ]
+        }
+    )
+
 
     st.plotly_chart(fig, use_container_width=True)
